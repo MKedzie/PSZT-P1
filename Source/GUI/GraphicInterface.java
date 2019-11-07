@@ -7,8 +7,15 @@ import java.awt.event.ContainerListener;
 public class GraphicInterface {
     JFrame programFrame;
     InitializeForm initializeForm;
+
+    Drawer drawer;
+
     Map map;
 
+
+    /**
+     * Konstruktor dla obiektu. Od razu uzupelnia JFrame o pierwsy panel
+     */
     public GraphicInterface() {
         this.programFrame = new JFrame();
         this.programFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -22,11 +29,9 @@ public class GraphicInterface {
             @Override
             public void componentRemoved(ContainerEvent e) {
 
-                map = new Map(initializeForm.xSize, initializeForm.ySize);
-
-
+                //initializeForm = null; // chyba powinno to byc, ale nie dam uciac sobie glowy. Najwyzej bedzie smiec w pamieci
             }
-        });
+        }); // listener do usuwawania panelu uruchamiającego. Spaghetti code, ale jak zrobic to lepiej?
         this.initializeForm.generateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -35,18 +40,30 @@ public class GraphicInterface {
                 initializeForm.ySize = (int) initializeForm.sizeYSpinner.getValue();
                 if (initializeForm.xSize < initializeForm.minimalSizeX || initializeForm.ySize < initializeForm.minimalSizeY)
                     JOptionPane.showMessageDialog(initializeForm.initializePanel, "Canvas too small");
-                if (initializeForm.xSize > initializeForm.minimalSizeX && initializeForm.ySize > initializeForm.minimalSizeY)
+                else if (initializeForm.xSize > initializeForm.minimalSizeX && initializeForm.ySize > initializeForm.minimalSizeY) {
                     programFrame.remove(initializeForm.initializePanel);
-                else
+                    map = new Map(initializeForm.xSize, initializeForm.ySize);
+                    drawer = new Drawer();
+                    drawer.setMap(map);
+                    programFrame.repaint();
+                    showPaintPanel();
+                } else
                     JOptionPane.showMessageDialog(programFrame, "Wut?");
             }
-        });
+        }); //przycisniecie przycisku. Spaghetti code, ale jak zrobic to lepiej?
         this.programFrame.add(initializeForm.initializePanel);
         this.programFrame.pack();
         this.programFrame.setVisible(true);
 
     }
 
+    public void showPaintPanel() {
+        this.programFrame.setVisible(false);
+        this.programFrame.remove(this.initializeForm.initializePanel);
+        this.programFrame.add(this.drawer.mainPanel);
+        this.programFrame.pack();
+        this.programFrame.setVisible(true);
+    }
 }
 
 

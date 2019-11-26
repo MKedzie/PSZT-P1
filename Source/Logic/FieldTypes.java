@@ -1,3 +1,3 @@
 public enum FieldTypes {
-    Free, Wall, Enter, Exit
+    Free, Wall, Enter, Exit, Way
 }

@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ContainerEvent;
@@ -19,6 +20,7 @@ public class GraphicInterface {
     public GraphicInterface() {
         this.programFrame = new JFrame();
         this.programFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.programFrame.setMinimumSize(new Dimension(300, 300));
         this.initializeForm = new InitializeForm();
         this.initializeForm.initializePanel.addContainerListener(new ContainerListener() {
             @Override
@@ -60,8 +62,10 @@ public class GraphicInterface {
     public void showPaintPanel() {
         this.programFrame.setVisible(false);
         this.programFrame.remove(this.initializeForm.initializePanel);
+        this.programFrame.setSize(300, 300);
         this.programFrame.add(this.drawer.mainPanel);
         this.programFrame.pack();
+        this.programFrame.repaint();
         this.programFrame.setVisible(true);
     }
 }

@@ -20,9 +20,10 @@ public class Map {
         return mapSizeX;
     }
 
-    public int getMapsizeY() {
+    public int getMapSizeY() {
         return mapsizeY;
     }
+
 
 
     public FieldTypes[][] getMapTiles() {
@@ -33,5 +34,15 @@ public class Map {
         MapTiles = mapTiles;
     }
 
+    public void setTile(int row, int column, FieldTypes type) {
+        this.MapTiles[row][column] = type;
+    }//todo
+    //funkcja upośledzona - umożliwia wiele wejść, wiele wyjść
+
+
+    public FieldTypes getField(int x, int y) {
+        return this.MapTiles[x][y];
+    }
+    // public void resizeMap(int newX, int newY){} // todo
 
 }

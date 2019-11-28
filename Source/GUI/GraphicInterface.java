@@ -1,3 +1,6 @@
+import Logic.InitMap;
+import org.ini4j.Ini;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -49,6 +52,11 @@ public class GraphicInterface {
                     drawer.setMap(map);
                     programFrame.repaint();
                     showPaintPanel();
+                    InitMap.Mapa = new int [initializeForm.xSize][initializeForm.ySize];
+                    InitMap.x=initializeForm.xSize;
+                    InitMap.y=initializeForm.ySize;
+                    InitMap.setFlag();
+
                 } else
                     JOptionPane.showMessageDialog(programFrame, "Wut?");
             }

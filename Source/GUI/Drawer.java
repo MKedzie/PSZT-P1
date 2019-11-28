@@ -1,3 +1,5 @@
+import Logic.A;
+import Logic.InitMap;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
@@ -73,6 +75,29 @@ public class Drawer {
                 int column = point.y / horizontalLinesSpaceBetween;
                 map.setTile(row, column, getCurrentSelectedFieldType());
                 drawingLabel.setIcon(new ImageIcon(recalculateImage()));
+                switch(getCurrentSelectedFieldType())
+                {
+                    case Free:
+                        InitMap.Mapa[row][column]=0;
+                        break;
+
+                    case Exit:
+                        InitMap.Mapa[row][column]=3;
+                        break;
+
+                    case Wall:
+                        InitMap.Mapa[row][column]=2;
+                        break;
+
+                    case Enter:
+                        InitMap.Mapa[row][column]=1;
+                        break;
+
+                    default:
+                        break;
+
+                }
+              // for (int i=0; i<3; i++) System.out.println(InitMap.Mapa[0][i]+" "+InitMap.Mapa[1][i]+" "+InitMap.Mapa[2][i]);
             }
         });
 
@@ -90,6 +115,19 @@ public class Drawer {
                 int column = point.y / horizontalLinesSpaceBetween;
                 map.setTile(row, column, getCurrentSelectedFieldType());
                 drawingLabel.setIcon(new ImageIcon(recalculateImage()));
+
+
+
+            }
+        });
+
+        executeButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                InitMap.setFlag();
+                InitMap.show();
+                A.A();
             }
         });
     }

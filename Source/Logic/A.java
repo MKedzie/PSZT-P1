@@ -1,22 +1,19 @@
 package Logic;
 
-import org.apache.velocity.Template;
-
-import java.lang.Math.*;
-import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.Vector;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class A {
-    public static int heuristics(Coords a, Coords b)
+    public static double heuristics(Coords a, Coords b)
     {
 
-        return Math.abs(a.x-b.x)+(a.y-b.y);
+        return Math.sqrt((a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y));
     }
 
     public static Vector<Coords> minimum(ArrayList<Vector<Coords>> Way, Coords end)
     {
-        int minCost=1000000;
+        double minCost=1000000;
         Vector<Coords> temp =new Vector<Coords>();
         Vector<Coords> vector =new Vector<Coords>();
 
@@ -30,14 +27,14 @@ public class A {
             }
 
         }
-
+      //  System.out.println("Minimum: "+minCost);
         return temp;
     }
 
 
 
     public static Vector<Coords> A()
-    {
+    {   int maxIterations=1000;
         ArrayList<Vector<Coords>> Way=new ArrayList<Vector<Coords>>();
         Coords start, end;
         start = new Coords();
@@ -68,10 +65,11 @@ public class A {
 
         vector.add(start);
         Way.add(vector);
+
         int minCost=1000000;
-
-        while(1==1) {  //szukanie do bolu
-
+        int k=0;
+        while(k<maxIterations) {  //szukanie do bolu
+            k++;
             temp = minimum(Way,end);
             Way.remove(temp);
             Coords current=temp.lastElement();
@@ -82,15 +80,15 @@ public class A {
                    if(j==0 && i==0)continue;
                    if((current.x + i)>=0 && (current.y + j)>=0 && (current.x + i)<=InitMap.x-1 && (current.y + j)<=InitMap.y-1) // jesli nie wychodzimy poza mape
                    {
-                       System.out.println("nowa iteracja");
-                       System.out.println(current.x+" "+current.y);
-                       System.out.println((current.x+i)+" "+(current.y+j));
+                       //System.out.println("nowa iteracja: "); System.out.println(current.x+" "+current.y);  System.out.println((current.x+i)+" "+(current.y+j));
 
                        if(InitMap.Mapa[current.x+i][current.y+j]==3) // jesli znalezlismy koniec
                        {
                         vector=temp;
                         InitMap.resetFlag();
                         System.out.println("Wybrana sciezka");
+
+                        vector.remove(start);
                         vector.forEach(coords -> System.out.println(coords.x+" "+coords.y));
                         return vector;
                        }
@@ -98,10 +96,35 @@ public class A {
                        {
                            if(InitMap.Mapa[current.x+i][current.y+j]==0)
                            {
-                            Vector<Coords> newVector =(Vector)temp.clone();
+                            AtomicInteger flag= new AtomicInteger(0);
                             Coords next=new Coords(current.x+i,current.y+j);
-                            newVector.add(next);
-                            Way.add(newVector);
+
+                                temp.forEach(iterator -> {
+                                    if(iterator.x==next.x && iterator.y==next.y) {
+                                        flag.set(1);
+
+                                    }
+                                    Way.forEach(list ->{
+                                        if(list.lastElement().x==next.x && list.lastElement().y==next.y)
+                                            flag.set(1);
+                                    });
+
+                                });
+                                if (flag.get()==1)
+                                    {
+                                        flag.set(0);
+                                       // Way.remove(temp);
+                                        continue;
+
+                                    }
+                                else
+                                    {
+                                        //System.out.println(flag.get());
+                                        Vector<Coords> newVector = (Vector) temp.clone();
+                                        newVector.add(next);
+                                        Way.add(newVector);
+                                    }
+
                            }
 
                        }
@@ -111,6 +134,11 @@ public class A {
            }
 
         }
+        if (k==maxIterations){
+            System.out.println("Nie mozna znalezc sciezki");
+            vector.removeAllElements();
 
+        }
+        return vector;
     }
 }

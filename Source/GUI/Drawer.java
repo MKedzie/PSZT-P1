@@ -117,6 +117,28 @@ public class Drawer {
                 int column = point.y / horizontalLinesSpaceBetween;
                 map.setTile(row, column, getCurrentSelectedFieldType());
                 drawingLabel.setIcon(new ImageIcon(recalculateImage()));
+                switch(getCurrentSelectedFieldType())
+                {
+                    case Free:
+                        InitMap.Mapa[row][column]=0;
+                        break;
+
+                    case Exit:
+                        InitMap.Mapa[row][column]=3;
+                        break;
+
+                    case Wall:
+                        InitMap.Mapa[row][column]=2;
+                        break;
+
+                    case Enter:
+                        InitMap.Mapa[row][column]=1;
+                        break;
+
+                    default:
+                        break;
+
+                }
 
 
 
@@ -129,7 +151,7 @@ public class Drawer {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 InitMap.setFlag();
-                InitMap.show();
+               // InitMap.show();
                 Vector<Coords> vector=A.A();
                 vector.forEach(coords -> map.setTile(coords.x, coords.y, FieldTypes.Way));
                 drawingLabel.setIcon(new ImageIcon(recalculateImage()));

@@ -15,7 +15,7 @@ public class A {
     {
         double minCost=1000000;
         Vector<Coords> temp =new Vector<Coords>();
-        Vector<Coords> vector =new Vector<Coords>();
+        Vector<Coords> vector;
 
         for(int it=0; it<Way.size(); it++ )  //szukanie minimum
         {
@@ -60,7 +60,6 @@ public class A {
 
         Vector<Coords> vector =new Vector<Coords>();
         Vector<Coords> temp;
-        Vector<Coords> check;
 
 
         vector.add(start);
@@ -80,16 +79,12 @@ public class A {
                    if(j==0 && i==0)continue;
                    if((current.x + i)>=0 && (current.y + j)>=0 && (current.x + i)<=InitMap.x-1 && (current.y + j)<=InitMap.y-1) // jesli nie wychodzimy poza mape
                    {
-                       //System.out.println("nowa iteracja: "); System.out.println(current.x+" "+current.y);  System.out.println((current.x+i)+" "+(current.y+j));
+
 
                        if(InitMap.Mapa[current.x+i][current.y+j]==3) // jesli znalezlismy koniec
                        {
                         vector=temp;
-                        InitMap.resetFlag();
-                        System.out.println("Wybrana sciezka");
-
                         vector.remove(start);
-                        vector.forEach(coords -> System.out.println(coords.x+" "+coords.y));
                         return vector;
                        }
                        else
@@ -113,13 +108,11 @@ public class A {
                                 if (flag.get()==1)
                                     {
                                         flag.set(0);
-                                       // Way.remove(temp);
                                         continue;
 
                                     }
                                 else
                                     {
-                                        //System.out.println(flag.get());
                                         Vector<Coords> newVector = (Vector) temp.clone();
                                         newVector.add(next);
                                         Way.add(newVector);

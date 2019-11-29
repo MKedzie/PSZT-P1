@@ -150,8 +150,6 @@ public class Drawer {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                InitMap.setFlag();
-               // InitMap.show();
                 Vector<Coords> vector=A.A();
                 vector.forEach(coords -> map.setTile(coords.x, coords.y, FieldTypes.Way));
                 drawingLabel.setIcon(new ImageIcon(recalculateImage()));

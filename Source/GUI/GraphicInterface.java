@@ -55,7 +55,6 @@ public class GraphicInterface {
                     InitMap.Mapa = new int [initializeForm.xSize][initializeForm.ySize];
                     InitMap.x=initializeForm.xSize;
                     InitMap.y=initializeForm.ySize;
-                    InitMap.setFlag();
 
                 } else
                     JOptionPane.showMessageDialog(programFrame, "Wut?");

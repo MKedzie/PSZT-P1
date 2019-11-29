@@ -28,5 +28,6 @@ public class InitMap {
         System.out.println("x: "+x+" y: "+y+" flag: "+flag);
     }
 
+
 }
 

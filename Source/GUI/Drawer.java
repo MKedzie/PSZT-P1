@@ -1,4 +1,5 @@
 import Logic.A;
+import Logic.Coords;
 import Logic.InitMap;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
@@ -9,6 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.util.Vector;
 
 public class Drawer {
     protected JPanel mainPanel;
@@ -118,6 +120,7 @@ public class Drawer {
 
 
 
+
             }
         });
 
@@ -127,7 +130,10 @@ public class Drawer {
                 super.mouseClicked(e);
                 InitMap.setFlag();
                 InitMap.show();
-                A.A();
+                Vector<Coords> vector=A.A();
+                vector.forEach(coords -> map.setTile(coords.x, coords.y, FieldTypes.Way));
+                drawingLabel.setIcon(new ImageIcon(recalculateImage()));
+
             }
         });
     }

@@ -1,5 +1,7 @@
 package Logic;
 
+import org.apache.velocity.Template;
+
 import java.lang.Math.*;
 import java.util.Iterator;
 import java.util.ArrayList;
@@ -34,7 +36,7 @@ public class A {
 
 
 
-    public static void A()
+    public static Vector<Coords> A()
     {
         ArrayList<Vector<Coords>> Way=new ArrayList<Vector<Coords>>();
         Coords start, end;
@@ -60,26 +62,55 @@ public class A {
         }
 
         Vector<Coords> vector =new Vector<Coords>();
-        Vector<Coords> temp =new Vector<Coords>();
+        Vector<Coords> temp;
+        Vector<Coords> check;
+
+
         vector.add(start);
         Way.add(vector);
         int minCost=1000000;
 
         while(1==1) {  //szukanie do bolu
 
+            temp = minimum(Way,end);
+            Way.remove(temp);
+            Coords current=temp.lastElement();
 
-           temp = minimum(Way,end);
-            
-            System.out.println(minCost);
+           for (int i =-1; i<2 ; i++)
+           {
+               for (int j =-1; j<2 ; j++) {
+                   if(j==0 && i==0)continue;
+                   if((current.x + i)>=0 && (current.y + j)>=0 && (current.x + i)<=InitMap.x-1 && (current.y + j)<=InitMap.y-1) // jesli nie wychodzimy poza mape
+                   {
+                       System.out.println("nowa iteracja");
+                       System.out.println(current.x+" "+current.y);
+                       System.out.println((current.x+i)+" "+(current.y+j));
 
+                       if(InitMap.Mapa[current.x+i][current.y+j]==3) // jesli znalezlismy koniec
+                       {
+                        vector=temp;
+                        InitMap.resetFlag();
+                        System.out.println("Wybrana sciezka");
+                        vector.forEach(coords -> System.out.println(coords.x+" "+coords.y));
+                        return vector;
+                       }
+                       else
+                       {
+                           if(InitMap.Mapa[current.x+i][current.y+j]==0)
+                           {
+                            Vector<Coords> newVector =(Vector)temp.clone();
+                            Coords next=new Coords(current.x+i,current.y+j);
+                            newVector.add(next);
+                            Way.add(newVector);
+                           }
 
+                       }
+                   }
 
-
-
-            break;
+               }
+           }
 
         }
 
-        InitMap.resetFlag();
     }
 }

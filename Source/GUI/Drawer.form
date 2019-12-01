@@ -54,19 +54,17 @@
             <constraints>
               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
-            <properties/>
+            <properties>
+              <visible value="false"/>
+            </properties>
           </component>
-          <vspacer id="fe1a8">
-            <constraints>
-              <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
-            </constraints>
-          </vspacer>
           <component id="e20e0" class="javax.swing.JLabel">
             <constraints>
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <text value="Size vertical"/>
+              <visible value="false"/>
             </properties>
           </component>
           <component id="66cbc" class="javax.swing.JLabel">
@@ -75,13 +73,16 @@
             </constraints>
             <properties>
               <text value="Size horizontal"/>
+              <visible value="false"/>
             </properties>
           </component>
           <component id="aa1a5" class="javax.swing.JSpinner" binding="resizeXSpinner">
             <constraints>
               <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
-            <properties/>
+            <properties>
+              <visible value="false"/>
+            </properties>
           </component>
           <component id="c773c" class="javax.swing.JButton" binding="resizeButton" default-binding="true">
             <constraints>
@@ -89,6 +90,15 @@
             </constraints>
             <properties>
               <text value="Resize"/>
+              <visible value="false"/>
+            </properties>
+          </component>
+          <component id="d88b9" class="javax.swing.JButton" binding="resetButton">
+            <constraints>
+              <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Reset map"/>
             </properties>
           </component>
         </children>

@@ -1,6 +1,3 @@
-import Logic.InitMap;
-import org.ini4j.Ini;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -60,6 +57,24 @@ public class GraphicInterface {
                     JOptionPane.showMessageDialog(programFrame, "Wut?");
             }
         }); //przycisniecie przycisku. Spaghetti code, ale jak zrobic to lepiej?
+
+        this.initializeForm.importButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                initializeForm.xSize = 1;
+                initializeForm.ySize = 1;
+                map = new Map(initializeForm.xSize, initializeForm.ySize);
+                String mapString = initializeForm.importTextField.getText();
+                map.fromString(mapString);
+                drawer = new Drawer();
+                drawer.setMap(map);
+                programFrame.repaint();
+                showPaintPanel();
+                InitMap.Mapa = new int[initializeForm.xSize][initializeForm.ySize];
+                InitMap.x = map.getMapSizeX();
+                InitMap.y = map.getMapSizeY();
+            }
+        });
         this.programFrame.add(initializeForm.initializePanel);
         this.programFrame.pack();
         this.programFrame.setVisible(true);

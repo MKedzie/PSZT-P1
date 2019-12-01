@@ -1,4 +1,3 @@
-package Logic;
 
 public class Coords {
     public int x;

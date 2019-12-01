@@ -90,6 +90,19 @@ public class Map {
         }
     }
 
+    public boolean viableMap() {
+        int enters = 0;
+        int exits = 0;
+        for (int row = 0; row < this.mapsizeY; row++) {
+            for (int column = 0; column < this.mapSizeX; column++) {
+                if (this.MapTiles[column][row] == FieldTypes.Enter) enters++;
+                if (this.MapTiles[column][row] == FieldTypes.Exit) exits++;
+            }
+        }
+        if (enters != 1 || exits != 1) return false;
+        else return true;
+    }
+
 
     public FieldTypes getField(int x, int y) {
         return this.MapTiles[x][y];

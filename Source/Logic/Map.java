@@ -90,6 +90,14 @@ public class Map {
         }
     }
 
+    public void softResetMap() {
+        for (int row = 0; row < this.mapsizeY; row++) {
+            for (int column = 0; column < this.mapSizeX; column++) {
+                if (this.MapTiles[column][row] == FieldTypes.Way) this.MapTiles[column][row] = FieldTypes.Free;
+            }
+        }
+    }
+
     public boolean viableMap() {
         int enters = 0;
         int exits = 0;

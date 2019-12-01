@@ -2,13 +2,21 @@
 import java.util.ArrayList;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BiFunction;
 
 public class A {
+
+    static BiFunction<Coords, Coords, Double> heuristicsFunction;
+
     public static double heuristics(Coords a, Coords b)
     {
-
-        return Math.sqrt((a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y));
+        return A.heuristicsFunction.apply(a, b).doubleValue();
     }
+
+    public void setHeuristicsFunction(BiFunction<Coords, Coords, Double> heuristicsFunction) {
+        this.heuristicsFunction = heuristicsFunction;
+    }
+
 
     public static Vector<Coords> minimum(ArrayList<Vector<Coords>> Way, Coords end)
     {

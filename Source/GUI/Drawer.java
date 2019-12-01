@@ -7,11 +7,12 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.util.Vector;
+import java.util.function.BiFunction;
 
 public class Drawer {
     protected JPanel mainPanel;
     protected JPanel drawingPanel;
-
+    BiFunction<Coords, Coords, Double> heuristicsFunction;
     protected JPanel upPanel;
     protected JPanel drawerSettingsPanel;
     protected JPanel settingPanel;
@@ -156,6 +157,12 @@ public class Drawer {
                     map.resetMap();
                     return;
                 }
+                map.softResetMap();
+                if (heuristicBox.getSelectedIndex() == 0)
+                    heuristicsFunction = (a, b) -> Double.valueOf(Math.sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y)));
+                if (heuristicBox.getSelectedIndex() == 1)
+                    heuristicsFunction = (a, b) -> Double.valueOf(a.x - b.x + a.y - b.y);
+                A.heuristicsFunction = heuristicsFunction;
                 Vector<Coords> vector = A.A();
                 vector.forEach(coords -> map.setTile(coords.x, coords.y, FieldTypes.Way));
                 drawingLabel.setIcon(new ImageIcon(recalculateImage()));
@@ -257,6 +264,12 @@ public class Drawer {
         settingPanel.setLayout(new GridLayoutManager(1, 3, new Insets(0, 0, 0, 0), -1, -1));
         mainPanel.add(settingPanel, BorderLayout.SOUTH);
         heuristicBox = new JComboBox();
+        final DefaultComboBoxModel defaultComboBoxModel1 = new DefaultComboBoxModel();
+        defaultComboBoxModel1.addElement("Pythagoras");
+        defaultComboBoxModel1.addElement("Manhattan");
+        defaultComboBoxModel1.addElement("MaxOfDimensions");
+        defaultComboBoxModel1.addElement("MinOfDimensions");
+        heuristicBox.setModel(defaultComboBoxModel1);
         settingPanel.add(heuristicBox, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         executeButton = new JButton();
         executeButton.setText("Find route");

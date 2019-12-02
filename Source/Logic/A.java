@@ -94,6 +94,7 @@ public class A {
                         vector=temp;
                         vector.remove(start);
                            A.result = true;
+                           System.out.println(k);
                         return vector;
                        }
                        else
@@ -137,7 +138,7 @@ public class A {
 
         }
         if (k==InitMap.maxIterations){
-            System.out.println("Nie mozna znalezc sciezki");
+            System.out.println("Nie mozna znalezc sciezki w podanej liczbie iteracji");
             vector.removeAllElements();
 
         }

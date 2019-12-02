@@ -5,7 +5,7 @@ public class InitMap {
     public static void importMap(Map mapa) {
         InitMap.x = mapa.getMapSizeX();
         InitMap.y = mapa.getMapSizeY();
-
+        InitMap.Mapa = new int[InitMap.x][InitMap.y];
         for (int row = 0; row < InitMap.y; row++) {
             for (int column = 0; column < InitMap.x; column++) {
                 FieldTypes temp = mapa.getField(column, row);

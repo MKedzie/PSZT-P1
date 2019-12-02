@@ -3,6 +3,8 @@ import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.util.ui.UIUtil;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -33,6 +35,8 @@ public class Drawer {
     protected JSlider randSlider;
     protected JButton randomButton;
     protected JLabel randomLabel;
+    protected JTextField iterationsField;
+    protected JSlider itSlider;
 
     protected Color freeColor;
     protected Color wallColor;
@@ -162,13 +166,15 @@ public class Drawer {
                 if (heuristicBox.getSelectedIndex() == 0)
                     heuristicsFunction = (a, b) -> Double.valueOf(Math.sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y)));
                 if (heuristicBox.getSelectedIndex() == 1)
-                    heuristicsFunction = (a, b) -> Double.valueOf(a.x - b.x + a.y - b.y);
+                    heuristicsFunction = (a, b) -> Double.valueOf(
+                            Math.abs(a.x - b.x) + Math.abs(a.y - b.y));
                 InitMap.importMap(map);
 
                 A.heuristicsFunction = heuristicsFunction;
 
                 Calendar before = Calendar.getInstance();
                 A.result = false;
+                InitMap.setMaxIter((int) Math.pow((double) 2, (double) itSlider.getValue()));
                 Vector<Coords> vector = A.A();
                 Calendar after = Calendar.getInstance();
                 long difference = after.getTimeInMillis() - before.getTimeInMillis();
@@ -214,6 +220,13 @@ public class Drawer {
                 drawingLabel.setIcon(new ImageIcon(recalculateImage()));
             }
         });
+        itSlider.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                int iterations = (int) Math.pow((double) 2, (double) itSlider.getValue());
+                iterationsField.setText("Liczba iteracji " + Long.toString(iterations));
+            }
+        });
     }
 
     /**
@@ -241,22 +254,30 @@ public class Drawer {
         exportButton.setText("Export");
         upPanel.add(exportButton, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         leftPanel = new JPanel();
-        leftPanel.setLayout(new GridLayoutManager(4, 1, new Insets(0, 0, 0, 0), -1, -1));
+        leftPanel.setLayout(new GridLayoutManager(6, 1, new Insets(0, 0, 0, 0), -1, -1));
         mainPanel.add(leftPanel, BorderLayout.EAST);
         resetButton = new JButton();
         resetButton.setText("Reset map");
-        leftPanel.add(resetButton, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        leftPanel.add(resetButton, new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         randSlider = new JSlider();
         randSlider.setMaximum(60);
         randSlider.setMinimum(30);
         randSlider.setValue(45);
-        leftPanel.add(randSlider, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        leftPanel.add(randSlider, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         randomLabel = new JLabel();
         randomLabel.setText("Rand strength");
-        leftPanel.add(randomLabel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        leftPanel.add(randomLabel, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         randomButton = new JButton();
         randomButton.setText("Randomize map");
-        leftPanel.add(randomButton, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        leftPanel.add(randomButton, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        iterationsField = new JTextField();
+        iterationsField.setText("Liczba iteracji");
+        leftPanel.add(iterationsField, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        itSlider = new JSlider();
+        itSlider.setMaximum(20);
+        itSlider.setMinimum(8);
+        itSlider.setValue(10);
+        leftPanel.add(itSlider, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         drawerSettingsPanel = new JPanel();
         drawerSettingsPanel.setLayout(new GridLayoutManager(4, 1, new Insets(0, 0, 0, 0), -1, -1));
         mainPanel.add(drawerSettingsPanel, BorderLayout.WEST);

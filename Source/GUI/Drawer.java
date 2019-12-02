@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.util.Calendar;
 import java.util.Vector;
 import java.util.function.BiFunction;
 
@@ -27,11 +28,11 @@ public class Drawer {
     protected JTextField seedField;
     protected JButton importButton;
     protected JButton exportButton;
-    protected JSpinner resizeYSpinner;
-    protected JSpinner resizeXSpinner;
-    protected JButton resizeButton;
     protected JLabel drawingLabel;
     protected JButton resetButton;
+    protected JSlider randSlider;
+    protected JButton randomButton;
+    protected JLabel randomLabel;
 
     protected Color freeColor;
     protected Color wallColor;
@@ -162,10 +163,21 @@ public class Drawer {
                     heuristicsFunction = (a, b) -> Double.valueOf(Math.sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y)));
                 if (heuristicBox.getSelectedIndex() == 1)
                     heuristicsFunction = (a, b) -> Double.valueOf(a.x - b.x + a.y - b.y);
+                InitMap.importMap(map);
+
                 A.heuristicsFunction = heuristicsFunction;
+
+                Calendar before = Calendar.getInstance();
+                A.result = false;
                 Vector<Coords> vector = A.A();
+                Calendar after = Calendar.getInstance();
+                long difference = after.getTimeInMillis() - before.getTimeInMillis();
+                double seconds = (double) difference / (double) 1000;
+                resultField.setText("Wynik ".concat(Boolean.toString(A.result)).concat(" W czasie :").concat(Long.toString(difference)).concat(" milisekund"));
                 vector.forEach(coords -> map.setTile(coords.x, coords.y, FieldTypes.Way));
+
                 drawingLabel.setIcon(new ImageIcon(recalculateImage()));
+
 
             }
         });
@@ -193,6 +205,15 @@ public class Drawer {
                 drawingLabel.setIcon(new ImageIcon(recalculateImage()));
             }
         });
+        randomButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                double randSeed = (double) randSlider.getValue();
+                map.randomizeMap(randSeed);
+                drawingLabel.setIcon(new ImageIcon(recalculateImage()));
+            }
+        });
     }
 
     /**
@@ -205,7 +226,7 @@ public class Drawer {
     private void $$$setupUI$$$() {
         mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout(0, 0));
-        mainPanel.setMinimumSize(new Dimension(50, 50));
+        mainPanel.setMinimumSize(new Dimension(300, 300));
         mainPanel.setPreferredSize(new Dimension(51, 51));
         upPanel = new JPanel();
         upPanel.setLayout(new GridLayoutManager(1, 3, new Insets(0, 0, 0, 0), -1, -1));
@@ -220,29 +241,22 @@ public class Drawer {
         exportButton.setText("Export");
         upPanel.add(exportButton, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         leftPanel = new JPanel();
-        leftPanel.setLayout(new GridLayoutManager(6, 1, new Insets(0, 0, 0, 0), -1, -1));
+        leftPanel.setLayout(new GridLayoutManager(4, 1, new Insets(0, 0, 0, 0), -1, -1));
         mainPanel.add(leftPanel, BorderLayout.EAST);
-        resizeYSpinner = new JSpinner();
-        resizeYSpinner.setVisible(false);
-        leftPanel.add(resizeYSpinner, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final JLabel label1 = new JLabel();
-        label1.setText("Size vertical");
-        label1.setVisible(false);
-        leftPanel.add(label1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final JLabel label2 = new JLabel();
-        label2.setText("Size horizontal");
-        label2.setVisible(false);
-        leftPanel.add(label2, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        resizeXSpinner = new JSpinner();
-        resizeXSpinner.setVisible(false);
-        leftPanel.add(resizeXSpinner, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        resizeButton = new JButton();
-        resizeButton.setText("Resize");
-        resizeButton.setVisible(false);
-        leftPanel.add(resizeButton, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         resetButton = new JButton();
         resetButton.setText("Reset map");
-        leftPanel.add(resetButton, new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        leftPanel.add(resetButton, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        randSlider = new JSlider();
+        randSlider.setMaximum(60);
+        randSlider.setMinimum(30);
+        randSlider.setValue(45);
+        leftPanel.add(randSlider, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        randomLabel = new JLabel();
+        randomLabel.setText("Rand strength");
+        leftPanel.add(randomLabel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        randomButton = new JButton();
+        randomButton.setText("Randomize map");
+        leftPanel.add(randomButton, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         drawerSettingsPanel = new JPanel();
         drawerSettingsPanel.setLayout(new GridLayoutManager(4, 1, new Insets(0, 0, 0, 0), -1, -1));
         mainPanel.add(drawerSettingsPanel, BorderLayout.WEST);
@@ -279,7 +293,7 @@ public class Drawer {
         settingPanel.add(resultField, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         drawingPanel = new JPanel();
         drawingPanel.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
-        drawingPanel.setMinimumSize(new Dimension(24, 24));
+        drawingPanel.setMinimumSize(new Dimension(200, 200));
         mainPanel.add(drawingPanel, BorderLayout.CENTER);
         drawingLabel = new JLabel();
         drawingLabel.setText("Label");

@@ -1,3 +1,5 @@
+import java.util.Random;
+
 public class Map {
     protected FieldTypes[][] MapTiles;
 
@@ -25,7 +27,7 @@ public class Map {
             String temp = "";
             for (int column = 0; column < mapSizeX; column++) {
                 FieldTypes field = this.MapTiles[column][row];
-                if (this.MapTiles[column][row] == null || this.MapTiles[column][row] == FieldTypes.Way)
+                if (this.MapTiles[column][row] == null || this.MapTiles[column][row] == FieldTypes.Way || this.MapTiles[column][row] == FieldTypes.Free)
                     temp = temp.concat("0");
                 else if (this.MapTiles[column][row] == FieldTypes.Wall) temp = temp.concat("1");
                 else if (this.MapTiles[column][row] == FieldTypes.Enter) temp = temp.concat("2");
@@ -66,9 +68,20 @@ public class Map {
     }
 
 
-
     public FieldTypes[][] getMapTiles() {
         return MapTiles;
+    }
+
+    public void randomizeMap(double randSeed) {
+        randSeed = randSeed / 100;
+        Random randomGenerator = new Random();
+        for (int row = 0; row < mapsizeY; row++) {
+            for (int column = 0; column < mapSizeX; column++) {
+                if (randomGenerator.nextDouble() > randSeed) this.MapTiles[column][row] = FieldTypes.Free;
+                else this.MapTiles[column][row] = FieldTypes.Wall;
+            }
+
+        }
     }
 
     public void setMapTiles(FieldTypes[][] mapTiles) {

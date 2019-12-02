@@ -17,6 +17,7 @@ public class A {
         this.heuristicsFunction = heuristicsFunction;
     }
 
+    public static boolean result = false;
 
     public static Vector<Coords> minimum(ArrayList<Vector<Coords>> Way, Coords end)
     {
@@ -92,6 +93,7 @@ public class A {
                        {
                         vector=temp;
                         vector.remove(start);
+                           A.result = true;
                         return vector;
                        }
                        else

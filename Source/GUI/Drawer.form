@@ -162,8 +162,6 @@
               <model>
                 <item value="Pythagoras"/>
                 <item value="Manhattan"/>
-                <item value="MaxOfDimensions"/>
-                <item value="MinOfDimensions"/>
               </model>
             </properties>
           </component>

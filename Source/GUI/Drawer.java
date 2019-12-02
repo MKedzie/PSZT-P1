@@ -175,12 +175,17 @@ public class Drawer {
                 Calendar before = Calendar.getInstance();
                 A.result = false;
                 InitMap.setMaxIter((int) Math.pow((double) 2, (double) itSlider.getValue()));
-                Vector<Coords> vector = A.A();
+                Vector<Coords> vector = null;
+                try{
+                 vector= A.A();}
+                catch (Exception ex){System.out.println("Nie jest możliwe znalezienie scieżki");}
                 Calendar after = Calendar.getInstance();
                 long difference = after.getTimeInMillis() - before.getTimeInMillis();
                 double seconds = (double) difference / (double) 1000;
                 resultField.setText("Wynik ".concat(Boolean.toString(A.result)).concat(" W czasie :").concat(Long.toString(difference)).concat(" milisekund"));
-                vector.forEach(coords -> map.setTile(coords.x, coords.y, FieldTypes.Way));
+                try{vector.forEach(coords -> map.setTile(coords.x, coords.y, FieldTypes.Way));}
+                catch (Exception ex){System.out.println("Blad rysowania sciezki");}
+
 
                 drawingLabel.setIcon(new ImageIcon(recalculateImage()));
 

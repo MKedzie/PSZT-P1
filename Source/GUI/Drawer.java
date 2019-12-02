@@ -1,6 +1,5 @@
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
-import com.intellij.util.ui.UIUtil;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -176,15 +175,20 @@ public class Drawer {
                 A.result = false;
                 InitMap.setMaxIter((int) Math.pow((double) 2, (double) itSlider.getValue()));
                 Vector<Coords> vector = null;
-                try{
-                 vector= A.A();}
-                catch (Exception ex){System.out.println("Nie jest możliwe znalezienie scieżki");}
+                try {
+                    vector = A.A();
+                } catch (Exception ex) {
+                    System.out.println("Nie jest możliwe znalezienie scieżki");
+                }
                 Calendar after = Calendar.getInstance();
                 long difference = after.getTimeInMillis() - before.getTimeInMillis();
                 double seconds = (double) difference / (double) 1000;
                 resultField.setText("Wynik ".concat(Boolean.toString(A.result)).concat(" W czasie :").concat(Long.toString(difference)).concat(" milisekund"));
-                try{vector.forEach(coords -> map.setTile(coords.x, coords.y, FieldTypes.Way));}
-                catch (Exception ex){System.out.println("Blad rysowania sciezki");}
+                try {
+                    vector.forEach(coords -> map.setTile(coords.x, coords.y, FieldTypes.Way));
+                } catch (Exception ex) {
+                    System.out.println("Blad rysowania sciezki");
+                }
 
 
                 drawingLabel.setIcon(new ImageIcon(recalculateImage()));
@@ -344,7 +348,7 @@ public class Drawer {
         int sizeY = this.drawingPanel.getHeight();
         int mapSizeX = this.map.getMapSizeX();
         int mapSizeY = this.map.getMapSizeY();
-        BufferedImage imageToDraw = UIUtil.createImage(sizeX, sizeY, BufferedImage.TYPE_3BYTE_BGR)/*new BufferedImage(sizeX,sizeY,BufferedImage.TYPE_3BYTE_BGR)*/;
+        BufferedImage imageToDraw = /*UIUtil.createImage(sizeX, sizeY, BufferedImage.TYPE_3BYTE_BGR)*/new BufferedImage(sizeX, sizeY, BufferedImage.TYPE_3BYTE_BGR);
         Graphics graphics = imageToDraw.getGraphics();
         graphics.setColor(Color.WHITE);
         graphics.fillRect(0, 0, sizeX, sizeY);

@@ -38,6 +38,10 @@ public class InitMap {
     public static int Mapa[][];
     public static int x;
     public static int y;
+    public static int maxIterations=10000;
+    public static void setMaxIter(int a){
+        maxIterations=a;}
+
 
 
 }

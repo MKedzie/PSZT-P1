@@ -42,7 +42,7 @@ public class A {
 
 
     public static Vector<Coords> A()
-    {   int maxIterations=1000;
+    {  // int maxIterations=100000;
         ArrayList<Vector<Coords>> Way=new ArrayList<Vector<Coords>>();
         Coords start, end;
         start = new Coords();
@@ -75,7 +75,7 @@ public class A {
 
         int minCost=1000000;
         int k=0;
-        while(k<maxIterations) {  //szukanie do bolu
+        while(k<InitMap.maxIterations) {  //szukanie do bolu
             k++;
             temp = minimum(Way,end);
             Way.remove(temp);
@@ -136,7 +136,7 @@ public class A {
            }
 
         }
-        if (k==maxIterations){
+        if (k==InitMap.maxIterations){
             System.out.println("Nie mozna znalezc sciezki");
             vector.removeAllElements();
 
